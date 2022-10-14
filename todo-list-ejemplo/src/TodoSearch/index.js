@@ -3,7 +3,7 @@ import './TodoSearch.css';
 
 
 // Obtiene un objeto con las propiedades necesarias
-function TodoSearch({searchValue, setSearchValue}){
+function TodoSearch({searchValue, setSearchValue, loading}){
     function onSearchValueChange(event){
         console.log(event.target.value)
         setSearchValue(event.target.value);
@@ -15,6 +15,7 @@ function TodoSearch({searchValue, setSearchValue}){
             placeholder="Busca TODOs"
             value={searchValue}
             onChange={onSearchValueChange}
+            disabled={loading}
         />
     );
 }

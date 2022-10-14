@@ -5,7 +5,7 @@ import {useLocalStorage} from "./useLocalStorage";
 // Custom hook
 function useTodos(){
     // Uso del customHook
-	const {item: todos, saveItem: saveTodos, loading, error} = useLocalStorage('TODOS_V1', []);
+	const {item: todos, saveItem: saveTodos, syncronizeItem: syncronizeTodos, loading, error} = useLocalStorage('TODOS_V1', []);
 
 	// El input search se establece como un estado
 	const [searchValue, setSearchValue] = React.useState('');
@@ -13,12 +13,12 @@ function useTodos(){
 	// Se establece el estado para el modal
 	const [openModal, setOpenModal] = React.useState(false);
 
-	// Calcula los TODOS completados (filtra el array con los objetos TODO que tienen completed a 'true')
+	// Calcula los TODOs completados (filtra el array con los objetos TODO que tienen completed a 'true')
 	const completedTodos = todos.filter(todo => todo.completed).length;
-	// Total de TODOS (tamaño del array de TODOS)
+	// Total de TODOs (tamaño del array de TODOS)
 	const totalTodos = todos.length;
 
-	// Todos filtrados según lo que se escribe en el cuadro de búsqueda
+	// TODOs filtrados según lo que se escribe en el cuadro de búsqueda
 	let searchedTodos = [];
 
 	// Si hay texto en la variable del estado enlazado el cuadro de búsqueda
@@ -116,7 +116,8 @@ function useTodos(){
 		completeTodos,
 		deleteTodos,
 		openModal,
-		setOpenModal
+		setOpenModal,
+		syncronizeTodos
     };
 }
 

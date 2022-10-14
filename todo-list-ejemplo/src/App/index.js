@@ -5,6 +5,7 @@ import {useTodos} from './useTodos';
 import {TodosError} from '../TodosError';
 import {TodosLoading} from '../TodosLoading';
 import {EmptyTodos} from '../EmptyTodos';
+import {EmptySearchResults} from '../EmptySearchResults';
 import {TodoHeader} from '../TodoHeader';
 import {TodoCounter} from '../TodoCounter';
 import {TodoSearch} from '../TodoSearch';
@@ -13,6 +14,7 @@ import {TodoItem} from '../TodoItem';
 import {CreateTodoButton} from '../CreateTodoButton';
 import {Modal} from '../Modal';
 import {TodoForm} from '../TodoForm';
+import {ChangeAlert} from '../ChangeAlert';
 
 
 /* const defaultTodos = [
@@ -39,40 +41,60 @@ function App(){
 		setOpenModal,
 		addTodo,
 		searchValue, 
-		setSearchValue
+		setSearchValue,
+		syncronizeTodos
 	} = useTodos();
 
 	return(
 		// Es obligatorio empezar con un DIV o bien usar este componente 'React.Fragment', que hace como una etiqueta invisible
 		<React.Fragment>
-			<TodoHeader>
-				{/* El  'TodoCounter' usa el hook context en su propio archivo */}
+			<TodoHeader
+				loading={loading}
+			>
 				<TodoCounter
 					totalTodos={totalTodos}
 					completedTodos={completedTodos}
 				/>
 				
-				{/* El  'TodoSearch' usa el hook context desde aquí, su componente padre */}
 				<TodoSearch
 					searchValue={searchValue}
 					setSearchValue={setSearchValue}
 				/>
 			</TodoHeader>
 			
-			<TodoList>
-				{error && <TodosError error={error}/>}
-				{loading ? <TodosLoading/> : (!error && !searchedTodos.length && <EmptyTodos/>)}
-				{/* Es necesario enviar un identificador único en los bucles de listas */}
-				{searchedTodos.map(todo =>(
+
+			{/* Render props */}
+			<TodoList
+				error={error}
+				loading={loading}
+				searchedTodos={searchedTodos}
+				totalTodos={totalTodos}
+				onError={()=> <TodosError/>}
+				onLoading={()=> <TodosLoading/>}
+				onEmptyTodos={()=> <EmptyTodos/>}
+				onEmptySearchResults={() => <EmptySearchResults searchValue={searchValue}/>}
+				// render={todo => (
+				// 	<TodoItem 
+				// 		key={todo?.text} 
+				// 		text={todo?.text}
+				// 		completed={todo?.completed}
+				// 		onComplete={()=> completeTodos(todo?.text)}
+				// 		onDelete={()=> deleteTodos(todo?.text)}
+				// 	/>
+				// )}
+			>
+				{/* Render function */}
+				{todo => (
 					<TodoItem 
-						key={todo.text} 
-						text={todo.text}
-						completed={todo.completed}
-						onComplete={()=>completeTodos(todo.text)}
-						onDelete={()=>deleteTodos(todo.text)}
+						key={todo?.text} 
+						text={todo?.text}
+						completed={todo?.completed}
+						onComplete={()=> completeTodos(todo?.text)}
+						onDelete={()=> deleteTodos(todo?.text)}
 					/>
-				))}
+				)}
 			</TodoList>
+
 
 			{!!openModal && (
 				<Modal>
@@ -86,6 +108,10 @@ function App(){
 
 			<CreateTodoButton
 				setOpenModal={setOpenModal}
+			/>
+
+			<ChangeAlert 
+				syncronize={syncronizeTodos}
 			/>
 		</React.Fragment>
 	);

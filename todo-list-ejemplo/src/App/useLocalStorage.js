@@ -16,7 +16,11 @@ function useLocalStorage(itemName, initialValue){
 	// El array de objetos de TODOS se establece como un estado
 	const [item, setItem] = React.useState(initialValue);
 
+	// Hook estado para controlar si la aplicación está actualizada entre pestañas
+	const [syncronizedItem, setSyncronizedItem] = React.useState(true);
 
+
+	// Al recibir un array vacío como segundo parámetro solo se ejecuta una vez
 	React.useEffect(()=>{
 		// Simula un tiempo de espera para poder visualizar el efecto
 		setTimeout(() => {
@@ -36,6 +40,7 @@ function useLocalStorage(itemName, initialValue){
 
 				setItem(parsedItem);
 				setLoading(false);
+				setSyncronizedItem(true);
 
 			} catch (error){
 				setLoading(false);
@@ -43,7 +48,8 @@ function useLocalStorage(itemName, initialValue){
 			}
 			
 		}, 3000);
-	});
+	}, [syncronizedItem]);
+	/* Cada vez que haya un cambio en 'syncronizedItem' se ejecutará este efecto */
 
 
 	/**
@@ -65,7 +71,17 @@ function useLocalStorage(itemName, initialValue){
 		
 	}
 
-	return {item, saveItem, loading, error};
+
+	/**
+	 * Lanza cambios en los estados.
+	 * Se establece el estado de cargando y cambia el estado de sincronizado para que se lance el hook del efecto.
+	 */
+	function syncronizeItem(){
+		setLoading(true);
+		setSyncronizedItem(false);
+	}
+
+	return {item, saveItem, syncronizeItem, loading, error};
 }
 
 
