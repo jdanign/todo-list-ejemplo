@@ -2,11 +2,12 @@ import React from "react";
 import './TodoList.css';
 
 
-function TodoList(props){
+function TodoList({children}){
+    // Composición: Utiliza un objeto para controlar el contenido de la lista (nº de elementos y propiedades que tendrá)
     return(
         <section>
             <ul>
-                {props.children}
+                {children}
             </ul>
         </section>
     )

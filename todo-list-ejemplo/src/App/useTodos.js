@@ -1,12 +1,9 @@
 import React from "react";
 import {useLocalStorage} from "./useLocalStorage";
 
-// Herramienta que nos da los permite dar y consumir el estado entre componentes
-// Aquí hay un 'TodoContext.Provider' y 'TodoContext.Provider'
-const TodoContext = React.createContext();
 
-
-function TodoProvider(props){
+// Custom hook
+function useTodos(){
     // Uso del customHook
 	const {item: todos, saveItem: saveTodos, loading, error} = useLocalStorage('TODOS_V1', []);
 
@@ -107,26 +104,21 @@ function TodoProvider(props){
 	console.log('Render después del USE EFFECT') */
 
 
-    return(
-        // Este componente envuelve a la aplicación, value será un objeto
-        <TodoContext.Provider value={{
-            loading,
-			error,
-			totalTodos,
-			completedTodos,
-			searchValue,
-			setSearchValue,
-			searchedTodos,
-			addTodo,
-			completeTodos,
-			deleteTodos,
-			openModal,
-			setOpenModal
-        }}>
-            {props.children}
-        </TodoContext.Provider>
-    );
+    return{
+		loading,
+		error,
+		totalTodos,
+		completedTodos,
+		searchValue,
+		setSearchValue,
+		searchedTodos,
+		addTodo,
+		completeTodos,
+		deleteTodos,
+		openModal,
+		setOpenModal
+    };
 }
 
 
-export {TodoContext, TodoProvider};
+export {useTodos};

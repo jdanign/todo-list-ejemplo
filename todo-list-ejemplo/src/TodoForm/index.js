@@ -1,16 +1,10 @@
 import React from "react";
-import {TodoContext} from "../TodoContext";
 import './TodoForm.css';
 
 
-function TodoForm(){
-    // Estado local para el formulario
+function TodoForm({addTodo, setOpenModal}){
+    // Estado local para el formulario (los estados hay que crearlos en el nivel mínimo donde vaya a usarse, en este caso, este estado solo será usado a nivel de formulario)
     const [newTodoValue, setnewTodoValue] = React.useState('');
-    // Contexto
-    const {
-        addTodo,
-        setOpenModal
-    } = React.useContext(TodoContext);
 
     function onChange(event){
         setnewTodoValue(event.target.value);
